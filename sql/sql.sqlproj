@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build">
+  <Sdk Name="Microsoft.Build.Sql" Version="0.1.9-preview" />
+  <PropertyGroup>
+    <Name>sql</Name>
+    <ProjectGuid>{A3EFE0CA-44A2-4736-A4D1-8D93AD64590C}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
+    <ModelCollation>1033, CI</ModelCollation>
+  </PropertyGroup>
+  <Target Name="BeforeBuild">
+    <Delete Files="$(BaseIntermediateOutputPath)\project.assets.json" />
+  </Target>
+  <ItemGroup>
+    <Build Remove="queries\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <ArtifactReference Condition="'$(NetCoreBuild)' == 'true'" Include="$(SystemDacpacsLocation)\SystemDacpacs\160\master.dacpac">
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
+    </ArtifactReference>
+    <ArtifactReference Condition="'$(NetCoreBuild)' != 'true'" Include="$(DacPacRootPath)\Extensions\Microsoft\SQLDB\Extensions\SqlServer\160\SqlSchemas\master.dacpac">
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
+    </ArtifactReference>
+  </ItemGroup>
+</Project>
