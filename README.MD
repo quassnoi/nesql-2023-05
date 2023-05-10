@@ -31,7 +31,7 @@ cd src
 dotnet tool restore
 ```
 
-## Run the test scripts
+# Run the test scripts
 
 Inside the `src` folder:
 
@@ -50,5 +50,28 @@ Inside the `src` folder:
 3. Every 20 invocations of the stored procedure, a worker prints hash character (`#`) on the screen.
 4. The test scripts run until stopped with a Ctrl-C.
 5. If it doesn't work, check [`appsettings.json`](./src/appsettings.json). It assumes that you followed the steps in the section "Install the database" above.
+
+# OPENJSON as a streaming function
+
+## Plain query
+
+Open [`PlainQuery.sql`](./sql/queries/PlainQuery.sql) and run it.
+
+It takes a JSON array with two objects in it and convert it to a recordset with two records. Exactly how it should be.
+
+## Zalgo query
+
+Open [`ZalgoQuery.sql`](./sql/queries/ZalgoQuery.sql) and run it.
+
+Oh no! This is not a valid JSON.
+
+It starts as an array of two objects, but then it looks like [Zalgo](https://en.wikipedia.org/wiki/Zalgo_text), the chthonic extradimensional being, is trying to creep into our world through a database query.
+
+Despite the fact that it is not a valid JSON and doesn't parse, the query runs and returns the same two-record result as the previous one.
+
+This is because `OPENJSON` is working with the JSON data in a streaming fashion. The `SELECT` clause of the Zalgo query has the `TOP 2` modifier, which means that `OPENJSON` will only need to retrieve two records from the underlying JSON.
+
+Once it has retrieved the two records, it stops reading and discards Zalgo-infected portion of the text. Our world is safe.
+
 
 Have fun!
